@@ -12,8 +12,8 @@ shinyUI(pageWithSidebar(
              "the location of the blue alternative hypothesis (alt mu),",
              "the sample size of both distributions (n), and the type I error rate (alpha).",
              " Based on the values you chose, you'll notice that the power depicted changes.",
-             " The big vertical line helps delineate type I error (alpha is area under the red curve to the right of this line)",
-             "from type II error (beta is the area under the blue curve to the left of this line).  Recall that",
+             " The big vertical line helps delineate type I error (alpha is area in red to the right of this line)",
+             "from type II error (beta is the area in blue to the left of this line).  Recall that",
              "the level of confidence is just one minus alpha and power is just one minus beta."),
     plotOutput('newGraph')
   )
