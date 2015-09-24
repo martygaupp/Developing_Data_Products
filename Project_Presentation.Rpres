@@ -1,0 +1,71 @@
+Shiny Project Presentation
+========================================================
+author: Marty Gaupp
+date: 27 Sep 2015
+
+<small> To explore the interaction between type I error ($\alpha$) and type II error ($\beta$), I built a shiny app that allows the user to manipulate $\sigma$, $\mu_a$, _n_, and $\alpha$.  The app then computes the resulting beta (and power) and shades in the appropriate area under each curve to represent alpha and beta. </small> 
+
+Introduction to Type I and Type II Errors
+========================================================
+
+- Type I error is _incorrectly rejecting a true null hypothesis_
+    - such a "false positive" is denoted by $\alpha$
+        - <small> detecting an effect that is not present </small>
+    - $\alpha$ = P(type I error) = P(reject $H_0$|$H_0$ is true)
+- Type II error is _failing to reject a false null hypothsis_
+    - such a "false negative" is denoted by $\beta$
+        - <small> failing to detect an effect that is present </small>
+    - $\beta$ = P(type II error) = P(FTR $H_0$|$H_0$ is false)
+- How about __confidence__ and __power__?
+    - confidence = 1 - $\alpha$ = rejecting an effect that is not present
+    - power = 1 - $\beta$ = detecting an effect that is present
+  
+Components of Type I and Type II Errors
+========================================================
+
+- $\alpha$ is usually controlled by the experimenter
+    - represents the amount of error that is tolerable
+    - affected by:
+        - <small> sample size (_n_) </small>
+        - <small> spread in the data ($\sigma$) </small>
+- $\beta$ is much harder to control
+    - affected by the true (but unkown) alt hypotheis ($\mu_a$)
+      - <small> the greater $\mu_a$ is from the null hypothesis ($\mu_0$) the better </small>
+      - <small> it's easier to detect a _bigger_ effect ($\Delta\mu$) </small>
+- $\alpha$ and $\beta$ work against each other
+    - to increase both, increase _n_, $\sigma$, and/or $\Delta\mu$
+
+Calculating Power
+========================================================
+
+```{r, echo=FALSE}
+require(ggplot2)
+# just a static plot
+mu0 = 30
+sigma = 4
+mua = 32
+n = 16
+alpha = 0.05
+xitc = mu0 + qnorm(1 - alpha) * sigma / sqrt(n)
+beta = round(pnorm(xitc, mean = mua, sd = sigma/sqrt(n), lower.tail = TRUE), 3)
+power = 100*(1 - beta)
+```
+- Type I error ($\alpha$) is controlled by the experimenter
+    - $\alpha$ = area under red curve to the right of the line
+- Type II error ($\beta$) depends on $\sigma$, $\mu_a$, _n_, and $\alpha$
+    - $\beta$ = area under blue curve to the left of the line
+- In the app, line location is set by the $\alpha$ slider
+    - $\beta$ = lower tail of a `pnorm` function call
+    - for example:
+        - <small> if $\mu_0$ = 30, $\sigma$ = 4, $\mu_a$ = 32, _n_ = 16, and $\alpha$ = 0.05 </small>
+        - <small> then $\beta$ = `r beta` </small>
+        - <small> and power = `r power` %</small>
+
+The Shiny App
+========================================================
+
+To use the shiny app to investigate the relationship between type I and type II error, just adjust $\sigma$, $\mu_a$, _n_, and/or $\alpha$ in the app
+
+![alt text](ShinyAppPicture.png)
+
+The app automatically calculates beta and power using the `pnorm` function described on the previous slide
